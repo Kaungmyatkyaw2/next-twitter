@@ -13,7 +13,7 @@ import { Twitter } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
 import { SigninFormData, signinResolver } from "@/hookform";
 
-const signin = () => {
+const Signup = () => {
   const {
     register,
     handleSubmit,
