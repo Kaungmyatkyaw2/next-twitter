@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Grid,
   FormControl,
@@ -10,18 +10,35 @@ import {
   TextField,
 } from "@mui/material";
 import { Twitter } from "@mui/icons-material";
-import { useForm } from "react-hook-form";
-import { SigninFormData, signinResolver } from "@/hookform";
+import { useForm, Controller } from "react-hook-form";
+import { SignupFormData, signupResolver } from "@/validation";
+import { InputPassword } from "@/components/form";
+import { useSignupMutation } from "@/store/service/endpoints/user.endpoints";
+import { useRouter } from "next/navigation";
 
 const Signup = () => {
+  const [signup, res] = useSignupMutation();
+  const router = useRouter();
+  const { push: navigate } = router;
+
+  console.log(res);
+
+  useEffect(() => {
+    if (res.isSuccess) {
+      navigate("/");
+    }
+  }, [res]);
+
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isValid, touchedFields },
-  } = useForm<SigninFormData>({ resolver: signinResolver });
+  } = useForm<SignupFormData>({ resolver: signupResolver });
 
-  function submitData(data: SigninFormData) {
-    console.log(data);
+  function submitData(data: SignupFormData) {
+    const { username, password, email } = data;
+    signup({ username, password, email });
   }
 
   return (
@@ -47,9 +64,9 @@ const Signup = () => {
         <TextField
           placeholder="Username"
           sx={{ width: "100%" }}
-          //   error={!!errors.email}
-          //   helperText={errors.email?.message}
-          //   {...register("email")}
+          error={!!errors.username}
+          helperText={errors.username?.message}
+          {...register("username")}
         />
         <TextField
           placeholder="Email"
@@ -58,20 +75,42 @@ const Signup = () => {
           helperText={errors.email?.message}
           {...register("email")}
         />
-        <TextField
-          placeholder="Password"
-          sx={{ width: "100%" }}
-          error={!!errors.password}
-          helperText={errors.password?.message}
-          {...register("password")}
+
+        <Controller
+          render={({ field: { onChange, onBlur, value, ref } }) => (
+            <InputPassword
+              placeholder="Password"
+              sx={{ width: "100%" }}
+              error={!!errors.password}
+              helperText={errors.password?.message}
+              value={value}
+              onChange={onChange}
+              onBlur={onBlur}
+              inputRef={ref}
+            />
+          )}
+          name="password"
+          control={control}
+          rules={{ required: true }}
         />
-        <TextField
-          placeholder="Confirm Password"
-          sx={{ width: "100%" }}
-          error={!!errors.password}
-          helperText={errors.password?.message}
-          {...register("password")}
+        <Controller
+          render={({ field: { onChange, onBlur, value, ref } }) => (
+            <InputPassword
+              placeholder="Confirm Password"
+              sx={{ width: "100%" }}
+              error={!!errors.confirmPassword}
+              helperText={errors.confirmPassword?.message}
+              value={value}
+              onChange={onChange}
+              onBlur={onBlur}
+              inputRef={ref}
+            />
+          )}
+          name="confirmPassword"
+          control={control}
+          rules={{ required: true }}
         />
+
         <Button
           // disabled={!isValid && touchedFields}
           onClick={handleSubmit((data) => submitData(data))}

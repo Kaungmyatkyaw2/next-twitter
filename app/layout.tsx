@@ -3,6 +3,8 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { createTheme, ThemeProvider, PaletteColorOptions } from "@mui/material";
+import { Provider } from "react-redux";
+import store from "@/store/store";
 declare module "@mui/material/styles" {
   interface CustomPalette {
     black: PaletteColorOptions;
@@ -64,7 +66,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <ThemeProvider theme={theme}>{children}</ThemeProvider>
+        <Provider store={store}>
+          <ThemeProvider theme={theme}>{children}</ThemeProvider>
+        </Provider>
       </body>
     </html>
   );

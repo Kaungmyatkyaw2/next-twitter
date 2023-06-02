@@ -10,8 +10,8 @@ import {
   TextField,
 } from "@mui/material";
 import { Twitter } from "@mui/icons-material";
-import { useForm } from "react-hook-form";
-import { SigninFormData, signinResolver } from "@/hookform";
+import { useForm, Controller } from "react-hook-form";
+import { SigninFormData, signinResolver } from "@/validation";
 import { InputPassword } from "@/components/form";
 
 const Signin = () => {
@@ -19,6 +19,7 @@ const Signin = () => {
     register,
     handleSubmit,
     formState: { errors, isValid, touchedFields },
+    control,
   } = useForm<SigninFormData>({ resolver: signinResolver });
 
   function submitData(data: SigninFormData) {
@@ -52,20 +53,23 @@ const Signin = () => {
           helperText={errors.email?.message}
           {...register("email")}
         />
-        {/* <TextField
-          placeholder="Password"
-          sx={{ width: "100%" }}
-          error={!!errors.password}
-          helperText={errors.password?.message}
-          {...register("password")}
-        /> */}
 
-        <InputPassword
-          placeholder="Password"
-          sx={{ width: "100%" }}
-          error={!!errors.password}
-          helperText={errors.password?.message}
-          {...register("password")}
+        <Controller
+          render={({ field: { onChange, onBlur, value, ref } }) => (
+            <InputPassword
+              placeholder="Password"
+              sx={{ width: "100%" }}
+              error={!!errors.password}
+              helperText={errors.password?.message}
+              value={value}
+              onChange={onChange}
+              onBlur={onBlur}
+              inputRef={ref}
+            />
+          )}
+          name="password"
+          control={control}
+          rules={{ required: true }}
         />
 
         <Button
