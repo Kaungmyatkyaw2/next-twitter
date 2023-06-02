@@ -19,4 +19,4 @@ const App = () => {
   );
 };
 
-export default page;
+export default App;
