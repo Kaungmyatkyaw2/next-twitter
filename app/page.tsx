@@ -11,9 +11,7 @@ const useStyles = makeStyles({
   },
 });
 
-const page = () => {
-  const classes = useStyles();
-
+const App = () => {
   return (
     <Button disabled size="small" variant="contained">
       page
