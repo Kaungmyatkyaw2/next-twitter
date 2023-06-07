@@ -2,8 +2,8 @@ import { z, ZodType } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export interface SigninFormData {
-  email: String;
-  password: String;
+  email: string;
+  password: string;
 }
 
 const schema: ZodType<SigninFormData> = z.object({

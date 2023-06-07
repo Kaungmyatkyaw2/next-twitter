@@ -5,6 +5,10 @@ import { Inter } from "next/font/google";
 import { createTheme, ThemeProvider, PaletteColorOptions } from "@mui/material";
 import { Provider } from "react-redux";
 import store from "@/store/store";
+import { SessionProvider } from "next-auth/react";
+import { ProtectGuard } from "@/components/auth";
+import { Toaster } from "react-hot-toast";
+
 declare module "@mui/material/styles" {
   interface CustomPalette {
     black: PaletteColorOptions;
@@ -47,6 +51,7 @@ export default function RootLayout({
             padding: "10px 30px",
             "&.Mui-disabled": {
               opacity: 50,
+              cursor: "not-allowed",
             },
           },
         },
@@ -65,10 +70,15 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <Provider store={store}>
-          <ThemeProvider theme={theme}>{children}</ThemeProvider>
-        </Provider>
+      <body>
+        <SessionProvider>
+          <Provider store={store}>
+            <ThemeProvider theme={theme}>
+              <ProtectGuard>{children}</ProtectGuard>
+            </ThemeProvider>
+          </Provider>
+        </SessionProvider>
+        <Toaster />
       </body>
     </html>
   );

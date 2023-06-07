@@ -9,7 +9,28 @@ const UserEndPoints = RootApi.injectEndpoints({
         body: payload,
       }),
     }),
+    getUser: build.query({
+      query: ({ id }) => ({
+        url: `/user/getUser?id=${id}`,
+        method: "GET",
+      }),
+    }),
+    followUser: build.mutation({
+      query: (payload) => ({
+        url: "/user/followUser",
+        method: "PATCH",
+        body: payload,
+      }),
+    }),
+    unfollowUser: build.mutation({
+      query: (payload) => ({
+        url: "/user/unfollowUser",
+        method: "PATCH",
+        body: payload,
+      }),
+    }),
   }),
 });
 
-export const { useSignupMutation } = UserEndPoints;
+export const { useSignupMutation, useLazyGetUserQuery, useFollowUserMutation,useUnfollowUserMutation } =
+  UserEndPoints;

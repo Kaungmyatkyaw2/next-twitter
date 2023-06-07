@@ -21,8 +21,6 @@ const Signup = () => {
   const router = useRouter();
   const { push: navigate } = router;
 
-  console.log(res);
-
   useEffect(() => {
     if (res.isSuccess) {
       navigate("/");
@@ -112,7 +110,7 @@ const Signup = () => {
         />
 
         <Button
-          // disabled={!isValid && touchedFields}
+          disabled={res.isLoading}
           onClick={handleSubmit((data) => submitData(data))}
           type="submit"
           sx={{ width: "100%" }}

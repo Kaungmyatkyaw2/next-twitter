@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Grid,
   FormControl,
@@ -13,8 +13,14 @@ import { Twitter } from "@mui/icons-material";
 import { useForm, Controller } from "react-hook-form";
 import { SigninFormData, signinResolver } from "@/validation";
 import { InputPassword } from "@/components/form";
+import { signIn, useSession } from "next-auth/react";
+import { toast } from "react-hot-toast";
+import { env } from "process";
 
 const Signin = () => {
+  const data = useSession();
+  console.log(data);
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -22,9 +28,26 @@ const Signin = () => {
     control,
   } = useForm<SigninFormData>({ resolver: signinResolver });
 
-  function submitData(data: SigninFormData) {
-    console.log(data);
+  async function submitData(data: SigninFormData) {
+    try {
+      setIsLoading(true);
+      const res = await signIn("credentials", {
+        ...data,
+        redirect: false,
+      });
+
+      if (res?.error) {
+        toast.error(res.error);
+      }
+
+      setIsLoading(false);
+    } catch (eror) {
+      setIsLoading(false);
+      console.log(eror);
+    }
   }
+
+  console.log(env.API_URL)
 
   return (
     <Grid
@@ -73,7 +96,7 @@ const Signin = () => {
         />
 
         <Button
-          // disabled={!isValid && touchedFields}
+          disabled={isLoading}
           onClick={handleSubmit((data) => submitData(data))}
           type="submit"
           sx={{ width: "100%" }}
