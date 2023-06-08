@@ -16,6 +16,9 @@ const TweetSlice = createSlice({
     storeTweets: (state, action) => {
       state.tweets = action.payload;
     },
+    addTweets: (state, action) => {
+      state.tweets = [...state.tweets, ...action.payload];
+    },
     dropTweet: (state, action) => {
       state.tweets = state.tweets.filter((i) => i.id !== action.payload.id);
     },
@@ -27,5 +30,6 @@ const TweetSlice = createSlice({
   },
 });
 
-export const { storeTweets, dropTweet, updateTweet } = TweetSlice.actions;
+export const { storeTweets, dropTweet, updateTweet, addTweets } =
+  TweetSlice.actions;
 export default TweetSlice.reducer;

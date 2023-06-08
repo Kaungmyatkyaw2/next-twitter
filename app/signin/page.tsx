@@ -19,7 +19,6 @@ import { env } from "process";
 
 const Signin = () => {
   const data = useSession();
-  console.log(data);
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,
@@ -43,11 +42,9 @@ const Signin = () => {
       setIsLoading(false);
     } catch (eror) {
       setIsLoading(false);
-      console.log(eror);
     }
   }
 
-  console.log(env.API_URL)
 
   return (
     <Grid

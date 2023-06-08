@@ -21,7 +21,6 @@ export const ProtectGuard = ({ children }: { children: React.ReactNode }) => {
     } else if (res.isError) {
       navigate("/signin");
     }
-    console.log(status);
   }, [res]);
 
   useEffect(() => {
@@ -30,8 +29,6 @@ export const ProtectGuard = ({ children }: { children: React.ReactNode }) => {
     if (status !== "loading") {
       if (isAuthorized && data?.user) {
         setIsLoading(true);
-        // @ts-ignore
-        console.log(data.user.id);
         // @ts-ignore
         getme({ id: data?.user.id });
       } else {

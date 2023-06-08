@@ -1,9 +1,10 @@
 "use client";
 
+import { axiosFetchTweets } from "@/axios-client";
 import { LayoutProvider } from "@/components/layout";
 import { CreateTweetForm, TweetCard } from "@/components/tweet";
 import { useLazyGetTweetsQuery } from "@/store/service/endpoints/tweet.endpoints";
-import { storeTweets } from "@/store/slice/tweet.slice";
+import { addTweets, storeTweets } from "@/store/slice/tweet.slice";
 import { RootState } from "@/store/store";
 import { Tweet } from "@/types";
 import { Box, CircularProgress } from "@mui/material";
@@ -12,6 +13,9 @@ import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 const App = () => {
+  const [skip, setSkip] = useState(0);
+  const [maxSkip, setMaxSkip] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
   const { me } = useSelector((state: RootState) => state.user);
   const { tweets } = useSelector((state: RootState) => state.tweet);
   const [getTweets, res] = useLazyGetTweetsQuery();
@@ -19,37 +23,79 @@ const App = () => {
 
   useEffect(() => {
     if (res.isSuccess) {
-      dispatch(storeTweets(res.data.data));
+      const data = res.data;
+      dispatch(storeTweets(data.data));
+      setMaxSkip(data.maxSkip);
+      setIsLoading(false);
     }
   }, [res]);
 
   useEffect(() => {
     if (me) {
-      getTweets({ skip: 0, take: 5 });
+      getTweets({ skip: 0, take: 2 });
     }
   }, [me]);
 
+  useEffect(() => {
+    if (skip > 0 && skip <= maxSkip) {
+      setIsLoading(true);
+      handleInfiniteScrollFetch();
+    }
+  }, [skip]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleInfiniteScroll);
+    return () => window.removeEventListener("scroll", handleInfiniteScroll);
+  }, []);
+
+  const handleInfiniteScroll = () => {
+    try {
+      if (
+        window.innerHeight + document.documentElement.scrollTop + 1 >
+        document.documentElement.scrollHeight
+      ) {
+        setSkip((prev) => prev + 2);
+      }
+    } catch (error) {}
+  };
+
+  const handleInfiniteScrollFetch = async () => {
+    try {
+      const { data } = await axiosFetchTweets({ skip, take: 2 });
+
+      if (data.isSuccess) {
+        setMaxSkip(data.maxSkip || 0);
+        dispatch(addTweets(data.data));
+      }
+
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+    }
+  };
+
   return (
     <LayoutProvider>
-      {res.isLoading ? (
+      <CreateTweetForm />
+
+      {tweets?.map((tweet) => (
+        <TweetCard tweet={tweet} />
+      ))}
+
+      {isLoading && (
         <Box
           sx={{
-            height: "100vh",
             width: "100%",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            paddingY: "20px",
+            borderBottom: "1px solid #E0E0E0",
           }}
         >
           <CircularProgress />
         </Box>
-      ) : (
-        <>
-          <CreateTweetForm />
-          {tweets?.map((tweet) => (
-            <TweetCard tweet={tweet} />
-          ))}
-        </>
       )}
     </LayoutProvider>
   );

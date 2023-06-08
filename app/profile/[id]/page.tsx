@@ -1,5 +1,6 @@
 "use client";
 
+import { axiosFetchTweetsByUser } from "@/axios-client";
 import { LayoutProvider } from "@/components/layout";
 import { ProfileHeader } from "@/components/profile/ProfileHeader";
 import { TweetCard } from "@/components/tweet";
@@ -12,13 +13,21 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 
 const Profile = () => {
+  const [skip, setSkip] = useState(0);
+  const [maxSkip, setMaxSkip] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [tweetFetchLoading, setTweetFetchLoading] = useState(true);
   const [user, setUser] = useState<User>({} as User);
   const [tweets, setTweets] = useState<Tweet[]>([]);
   const [getUser, res] = useLazyGetUserQuery();
   const [getTweets, tweetRes] = useLazyGetTweetsByUserQuery();
   const params = useParams();
   const { id }: any = params;
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleInfiniteScroll);
+    return () => window.removeEventListener("scroll", handleInfiniteScroll);
+  }, []);
 
   useEffect(() => {
     if (id) {
@@ -40,17 +49,58 @@ const Profile = () => {
   useEffect(() => {
     if (tweetRes.isSuccess) {
       setTweets(tweetRes.data.data);
+      setMaxSkip(tweetRes.data.maxSkip || 0);
+      setTweetFetchLoading(false);
     } else if (tweetRes.isError) {
+      setTweetFetchLoading(false);
       // @ts-ignore
       toast.error(tweetRes.error.message);
     }
   }, [tweetRes]);
 
   useEffect(() => {
-    if (user.id) {
-      getTweets({ skip: 0, take: 5, userId: user.id });
+    if (user.id && skip === 0) {
+      getTweets({ skip: 0, take: 2, userId: user.id });
     }
   }, [user]);
+
+  useEffect(() => {
+    if (skip > 0 && skip <= maxSkip) {
+      setTweetFetchLoading(true);
+      handleInfiniteScrollFetch();
+    }
+  }, [skip]);
+
+  const handleInfiniteScroll = () => {
+    try {
+      if (
+        window.innerHeight + document.documentElement.scrollTop + 1 >
+        document.documentElement.scrollHeight
+      ) {
+        setSkip((prev) => prev + 2);
+      }
+    } catch (error) {}
+  };
+
+  const handleInfiniteScrollFetch = async () => {
+    try {
+      const { data } = await axiosFetchTweetsByUser({
+        skip,
+        take: 2,
+        userId: user.id,
+      });
+
+      if (data.isSuccess) {
+        setMaxSkip(data.maxSkip || 0);
+        setTweets([...tweets, ...data.data]);
+      }
+
+      setTweetFetchLoading(false);
+    } catch (error) {
+      setTweetFetchLoading(false);
+      console.log(error);
+    }
+  };
 
   return (
     <LayoutProvider>
@@ -69,10 +119,10 @@ const Profile = () => {
       ) : (
         <>
           <ProfileHeader setUser={setUser} user={user} />
-          {
-            tweets.map(i => <TweetCard tweet={i} key={i.id}/>)
-          }
-          {tweetRes.isLoading && (
+          {tweets.map((i) => (
+            <TweetCard tweet={i} key={i.id} />
+          ))}
+          {tweetFetchLoading && (
             <Box
               sx={{
                 width: "100%",
