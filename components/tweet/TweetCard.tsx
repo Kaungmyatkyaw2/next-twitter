@@ -1,17 +1,62 @@
 import { Tweet } from "@/types";
 import { Box, Typography, Tooltip } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import MessageIcon from "@mui/icons-material/Message";
 import ReplyIcon from "@mui/icons-material/Reply";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TweetCardHeader } from "./TweetCardHeader";
+import {
+  useReactTweetMutation,
+  useUnreactTweetMutation,
+} from "@/store/service/endpoints/tweet.endpoints";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { useDispatch } from "react-redux";
+import { updateTweet } from "@/store/slice/tweet.slice";
 
 interface Prop {
   tweet: Tweet;
 }
 
 export const TweetCard = ({ tweet }: Prop) => {
+  const [reactTweet, reactRes] = useReactTweetMutation();
+  const [unreactTweet, unreactRes] = useUnreactTweetMutation();
+  const [isReacted, setIsReacted] = useState(false);
+  const { me } = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (reactRes.isSuccess) {
+      dispatch(
+        updateTweet({
+          ...tweet,
+          tweetReactions: [...tweet.tweetReactions, reactRes.data.data],
+        })
+      );
+    }
+  }, [reactRes]);
+
+  useEffect(() => {
+    if (unreactRes.isSuccess) {
+      dispatch(
+        updateTweet({
+          ...tweet,
+          tweetReactions: tweet.tweetReactions.filter(
+            (i) => i.userId !== me?.id
+          ),
+        })
+      );
+    }
+  }, [unreactRes]);
+
+  useEffect(() => {
+    const isExist = tweet.tweetReactions.find((i) => i.userId === me?.id);
+
+    setIsReacted(!!isExist);
+  }, [tweet]);
+
   return (
     <Box
       sx={{
@@ -58,10 +103,37 @@ export const TweetCard = ({ tweet }: Prop) => {
           }}
         >
           <Tooltip title="React">
-            {/* @ts-ignore */}
-            <FavoriteBorderIcon
-              style={{ color: "#888888", fontSize: "20px" }}
-            />
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              {/* @ts-ignore */}
+              {isReacted ? (
+                <FavoriteIcon
+                  onClick={() =>
+                    unreactTweet({ userId: me?.id, tweetId: tweet.id })
+                  }
+                  style={{
+                    color: "red",
+                    fontSize: "20px",
+                    cursor: "pointer",
+                  }}
+                />
+              ) : (
+                <FavoriteBorderIcon
+                  onClick={() =>
+                    reactTweet({ userId: me?.id, tweetId: tweet.id })
+                  }
+                  style={{
+                    color: "#888888",
+                    fontSize: "20px",
+                    cursor: "pointer",
+                  }}
+                />
+              )}
+              <Typography sx={{ fontSize: "15px" }}>
+                {reactRes.isLoading || unreactRes.isLoading
+                  ? "Reacting"
+                  : tweet.tweetReactions.length}
+              </Typography>
+            </Box>
           </Tooltip>
           <Tooltip title="Comment">
             {/* @ts-ignore */}

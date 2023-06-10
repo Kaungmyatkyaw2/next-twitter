@@ -6,19 +6,24 @@ import { ProfileHeader } from "@/components/profile/ProfileHeader";
 import { TweetCard } from "@/components/tweet";
 import { useLazyGetTweetsByUserQuery } from "@/store/service/endpoints/tweet.endpoints";
 import { useLazyGetUserQuery } from "@/store/service/endpoints/user.endpoints";
+import { addTweets, storeTweets } from "@/store/slice/tweet.slice";
+import { RootState } from "@/store/store";
 import { Tweet, User } from "@/types";
 import { Box, CircularProgress } from "@mui/material";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 const Profile = () => {
+  const { tweets } = useSelector((state: RootState) => state.tweet);
+  const dispatch = useDispatch();
   const [skip, setSkip] = useState(0);
   const [maxSkip, setMaxSkip] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [tweetFetchLoading, setTweetFetchLoading] = useState(true);
   const [user, setUser] = useState<User>({} as User);
-  const [tweets, setTweets] = useState<Tweet[]>([]);
   const [getUser, res] = useLazyGetUserQuery();
   const [getTweets, tweetRes] = useLazyGetTweetsByUserQuery();
   const params = useParams();
@@ -48,7 +53,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (tweetRes.isSuccess) {
-      setTweets(tweetRes.data.data);
+      dispatch(storeTweets(tweetRes.data.data));
       setMaxSkip(tweetRes.data.maxSkip || 0);
       setTweetFetchLoading(false);
     } else if (tweetRes.isError) {
@@ -92,7 +97,7 @@ const Profile = () => {
 
       if (data.isSuccess) {
         setMaxSkip(data.maxSkip || 0);
-        setTweets([...tweets, ...data.data]);
+        dispatch(addTweets(tweetRes.data.data));
       }
 
       setTweetFetchLoading(false);

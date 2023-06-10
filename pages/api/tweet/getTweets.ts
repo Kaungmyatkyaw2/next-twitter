@@ -16,6 +16,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
               following: true,
             },
           },
+          tweetReactions: true,
         },
         take: +take,
         skip: +skip,

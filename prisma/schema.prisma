@@ -11,23 +11,36 @@ datasource db {
 }
 
 model users {
-  id         String   @id @default(uuid())
-  username   String
-  email      String   @unique()
-  password   String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @default(now()) @updatedAt
-  tweets     tweets[]
-  followedBy users[]  @relation("UserFollows")
-  following  users[]  @relation("UserFollows")
+  id             String           @id @default(uuid())
+  username       String
+  email          String           @unique()
+  password       String
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @default(now()) @updatedAt
+  tweets         tweets[]
+  followedBy     users[]          @relation("UserFollows")
+  following      users[]          @relation("UserFollows")
+  tweetReactions tweetReactions[]
 }
 
 model tweets {
-  id        String   @id @default(uuid())
-  caption   String?
-  image     String?
+  id             String           @id @default(uuid())
+  caption        String?
+  image          String?
+  user           users            @relation(fields: [userId], references: [id])
+  userId         String
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @default(now()) @updatedAt
+  tweetReactions tweetReactions[]
+}
+
+model tweetReactions {
   user      users    @relation(fields: [userId], references: [id])
   userId    String
+  tweet     tweets   @relation(fields: [tweetId], references: [id])
+  tweetId   String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+
+  @@id([userId, tweetId])
 }
