@@ -2,13 +2,12 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "@/lib";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { take, skip }: any = req.query;
+  const { id }: any = req.query;
 
   if (req.method === "GET") {
     try {
-      const countOfTweets = await prisma.tweets.count({});
-
-      const tweets = await prisma.tweets.findMany({
+      const tweet = await prisma.tweets.findUnique({
+        where: { id },
         include: {
           user: {
             include: {
@@ -21,19 +20,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             include: {
               user: true,
             },
+            orderBy: {
+              createdAt: "asc",
+            },
           },
-        },
-        take: +take,
-        skip: +skip,
-        orderBy: {
-          createdAt: "desc",
         },
       });
 
-      res.status(201).json({
+      res.status(200).json({
         isSuccess: true,
-        data: tweets,
-        maxSkip: Math.ceil(countOfTweets / take),
+        data: tweet,
       });
     } catch (error) {
       res.status(400).json({ message: "Something went wrong", error });

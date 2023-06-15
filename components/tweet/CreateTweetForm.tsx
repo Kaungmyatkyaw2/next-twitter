@@ -8,6 +8,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { useDispatch } from "react-redux";
 import { storeTweets } from "@/store/slice/tweet.slice";
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 
 export const CreateTweetForm = () => {
   const [createTweet, res] = useCreateTweetMutation();
@@ -18,6 +20,7 @@ export const CreateTweetForm = () => {
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const dispatch = useDispatch();
+  const { push } = useRouter();
 
   useEffect(() => {
     if (res.isSuccess) {
@@ -27,6 +30,7 @@ export const CreateTweetForm = () => {
       setPreviewUrl(null);
       setFile(null);
       setCaption("");
+      toast.success("Successfully tweeted");
     }
   }, [res]);
 
@@ -40,19 +44,23 @@ export const CreateTweetForm = () => {
   };
 
   const handleCreate = async () => {
-    const payload = {
-      image: "",
-      caption,
-      userId: me?.id,
-    };
+    if (caption.length || file !== null) {
+      const payload = {
+        image: "",
+        caption,
+        userId: me?.id,
+      };
 
-    if (file !== null && previewUrl !== null) {
-      await uploadImage(file, previewUrl + Date.now())
-        .then((url) => (payload.image = url))
-        .catch((error) => console.log(error));
+      if (file !== null && previewUrl !== null) {
+        await uploadImage(file, previewUrl + Date.now())
+          .then((url) => (payload.image = url))
+          .catch((error) => console.log(error));
+      }
+
+      createTweet(payload);
+    } else {
+      toast.error("Must have caption or image something...");
     }
-
-    createTweet(payload);
   };
 
   return (

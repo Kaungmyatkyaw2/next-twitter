@@ -6,7 +6,6 @@ import { CreateTweetForm, TweetCard } from "@/components/tweet";
 import { useLazyGetTweetsQuery } from "@/store/service/endpoints/tweet.endpoints";
 import { addTweets, storeTweets } from "@/store/slice/tweet.slice";
 import { RootState } from "@/store/store";
-import { Tweet } from "@/types";
 import { Box, CircularProgress } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -31,6 +30,7 @@ const App = () => {
   }, [res]);
 
   useEffect(() => {
+    dispatch(storeTweets([]));
     if (me) {
       getTweets({ skip: 0, take: 2 });
     }
@@ -61,11 +61,11 @@ const App = () => {
 
   const handleInfiniteScrollFetch = async () => {
     try {
-      const { data } = await axiosFetchTweets({ skip, take: 2 });
+      const { data: response } = await axiosFetchTweets({ skip, take: 2 });
 
-      if (data.isSuccess) {
-        setMaxSkip(data.maxSkip || 0);
-        dispatch(addTweets(data.data));
+      if (response.isSuccess) {
+        setMaxSkip(response.maxSkip || 0);
+        dispatch(addTweets(response.data));
       }
 
       setIsLoading(false);

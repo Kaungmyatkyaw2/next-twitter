@@ -83,7 +83,10 @@ export const TweetCardHeader = ({ tweet }: { tweet: Tweet }) => {
           }}
         >
           <Box>
-            <Typography sx={{ fontWeight: "bold" }}>
+            <Typography
+              sx={{ fontWeight: "bold", cursor: "pointer" }}
+              onClick={() => push(`/profile/${tweet.userId}`)}
+            >
               {tweet.user.username}
             </Typography>
             <Typography sx={{ fontSize: "12px", color: "#888888" }}>

@@ -36,6 +36,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (id) {
+      dispatch(storeTweets([]));
       getUser({ id });
     }
   }, [id]);
@@ -97,7 +98,7 @@ const Profile = () => {
 
       if (data.isSuccess) {
         setMaxSkip(data.maxSkip || 0);
-        dispatch(addTweets(tweetRes.data.data));
+        dispatch(addTweets(data.data));
       }
 
       setTweetFetchLoading(false);

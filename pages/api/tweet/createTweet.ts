@@ -14,10 +14,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         data: payload,
         include: {
           user: {
-            include : {
+            include: {
               followedBy: true,
-            following: true,
-            }
+              following: true,
+            },
+          },
+          tweetReactions: true,
+          tweetComments: {
+            include: {
+              user: true,
+            },
           },
         },
       });

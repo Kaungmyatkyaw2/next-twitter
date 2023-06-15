@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { useDispatch } from "react-redux";
 import { updateTweet } from "@/store/slice/tweet.slice";
+import { useRouter } from "next/navigation";
 
 interface Prop {
   tweet: Tweet;
@@ -25,6 +26,7 @@ export const TweetCard = ({ tweet }: Prop) => {
   const [unreactTweet, unreactRes] = useUnreactTweetMutation();
   const [isReacted, setIsReacted] = useState(false);
   const { me } = useSelector((state: RootState) => state.user);
+  const { push } = useRouter();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -85,10 +87,11 @@ export const TweetCard = ({ tweet }: Prop) => {
               width: "100%",
               height: "200px",
               background: "red",
+              objectFit: "cover",
             }}
             position={"relative"}
           >
-            <Image src={tweet.image} alt="image" fill />
+            <Image objectFit="cover" src={tweet.image} alt="image" fill />
           </Box>
         ) : (
           <></>
@@ -137,7 +140,22 @@ export const TweetCard = ({ tweet }: Prop) => {
           </Tooltip>
           <Tooltip title="Comment">
             {/* @ts-ignore */}
-            <MessageIcon style={{ color: "#888888", fontSize: "20px" }} />
+            <Box
+              onClick={() => {
+                push(`/tweet/${tweet.id}`);
+              }}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                cursor: "pointer",
+              }}
+            >
+              <MessageIcon style={{ color: "#888888", fontSize: "20px" }} />
+              <Typography sx={{ fontSize: "15px" }}>
+                {tweet.tweetComments.length}
+              </Typography>
+            </Box>
           </Tooltip>
           <Tooltip title="Share">
             {/* @ts-ignore */}

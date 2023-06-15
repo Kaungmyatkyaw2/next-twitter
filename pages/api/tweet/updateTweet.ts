@@ -24,7 +24,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const tweet = await prisma.tweets.update({
           where: { id },
           data: payload,
-          include: { user: true },
+          include: {
+            user: true,
+            tweetReactions: true,
+            tweetComments: {
+              include: {
+                user: true,
+              },
+            },
+          },
         });
 
         res.status(200).json({ isSuccess: true, data: tweet });

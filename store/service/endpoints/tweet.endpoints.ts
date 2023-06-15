@@ -28,6 +28,14 @@ const TweetEndPoints = RootApi.injectEndpoints({
         method: "GET",
       }),
     }),
+
+    getTweetsById: build.query({
+      query: ({ id }) => ({
+        url: `/tweet/getTweetById?id=${id}`,
+        method: "GET",
+      }),
+    }),
+
     deleteTweet: build.mutation({
       query: ({ id }) => ({
         url: `/tweet/deleteTweet?id=${id}`,
@@ -53,6 +61,7 @@ const TweetEndPoints = RootApi.injectEndpoints({
 export const {
   useCreateTweetMutation,
   useLazyGetTweetsQuery,
+  useLazyGetTweetsByIdQuery,
   useDeleteTweetMutation,
   useUpdateTweetMutation,
   useLazyGetTweetsByUserQuery,

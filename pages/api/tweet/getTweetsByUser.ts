@@ -24,6 +24,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             },
           },
           tweetReactions: true,
+          tweetComments: {
+            include: {
+              user: true,
+            },
+          },
         },
         take: +take,
         skip: +skip,
@@ -32,9 +37,13 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         },
       });
 
-      res
-        .status(201)
-        .json({ isSuccess: true, data: tweets, maxSkip: countOfTweets });
+      console.log({ skip, take, tweets });
+
+      res.status(201).json({
+        isSuccess: true,
+        data: tweets,
+        maxSkip: Math.ceil(countOfTweets / take),
+      });
     } catch (error) {
       res.status(400).json({ message: "Something went wrong", error });
     }

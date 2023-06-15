@@ -21,6 +21,7 @@ model users {
   followedBy     users[]          @relation("UserFollows")
   following      users[]          @relation("UserFollows")
   tweetReactions tweetReactions[]
+  tweetComments  tweetComments[]
 }
 
 model tweets {
@@ -32,6 +33,7 @@ model tweets {
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @default(now()) @updatedAt
   tweetReactions tweetReactions[]
+  tweetComments  tweetComments[]
 }
 
 model tweetReactions {
@@ -43,4 +45,15 @@ model tweetReactions {
   updatedAt DateTime @default(now()) @updatedAt
 
   @@id([userId, tweetId])
+}
+
+model tweetComments {
+  id          String   @id @default(cuid())
+  user        users    @relation(fields: [userId], references: [id])
+  userId      String
+  tweet       tweets   @relation(fields: [tweetId], references: [id])
+  tweetId     String
+  description String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
 }
