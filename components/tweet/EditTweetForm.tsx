@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux";
 import ClearIcon from "@mui/icons-material/Clear";
 import { Tweet } from "@/types";
 import { updateTweet } from "@/store/slice/tweet.slice";
+import { toast } from "react-hot-toast";
 
 export const EditTweetForm = ({
   tweet,
@@ -24,6 +25,7 @@ export const EditTweetForm = ({
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [updateTweetFun, res] = useUpdateTweetMutation();
+  const [isLoading, setIsLoading] = useState(false);
   const [caption, setCaption] = useState("");
   const fileRef = useRef<HTMLInputElement>(null!);
   const [file, setFile] = useState<File | null>(null);
@@ -42,6 +44,11 @@ export const EditTweetForm = ({
       setPreviewUrl(null);
       setFile(null);
       setCaption("");
+      toast.success("Successfully Updated");
+      setIsLoading(false);
+    } else if (res.isError) {
+      setIsLoading(false);
+      toast.error("Something went wrong");
     }
   }, [res]);
 
@@ -55,6 +62,7 @@ export const EditTweetForm = ({
   };
 
   const handleUpdate = async () => {
+    setIsLoading(true);
     const payload = {
       image: previewUrl,
       caption,
@@ -62,11 +70,13 @@ export const EditTweetForm = ({
 
     if (file !== null && previewUrl !== null) {
       await uploadImage(file, previewUrl + Date.now())
-        .then((url) => (payload.image = url))
+        .then((url) => {
+          updateTweetFun({ data: { ...payload, image: url }, id: tweet.id });
+        })
         .catch((error) => console.log(error));
+    } else {
+      updateTweetFun({ data: payload, id: tweet.id });
     }
-
-    updateTweetFun({ data: payload, id: tweet.id });
   };
 
   return (
@@ -162,9 +172,9 @@ export const EditTweetForm = ({
                   variant="contained"
                   size="small"
                   sx={{ width: 100, padding: 1 }}
-                  disabled={res.isLoading}
+                  disabled={isLoading}
                 >
-                  Tweet
+                  Update
                 </Button>
                 <Button
                   color="black"
@@ -172,7 +182,7 @@ export const EditTweetForm = ({
                   variant="contained"
                   size="small"
                   sx={{ width: 100, padding: 1 }}
-                  disabled={res.isLoading}
+                  disabled={isLoading}
                 >
                   Cancel
                 </Button>

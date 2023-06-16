@@ -23,8 +23,6 @@ declare module "@mui/material/Button" {
   }
 }
 
-const inter = Inter({ subsets: ["latin"] });
-
 export default function RootLayout({
   children,
 }: {
@@ -62,6 +60,14 @@ export default function RootLayout({
             "& .MuiInputBase-root": {
               height: 50,
             },
+          },
+        },
+      },
+      MuiAppBar: {
+        styleOverrides: {
+          colorPrimary: {
+            backgroundColor: "white",
+            color: "black",
           },
         },
       },

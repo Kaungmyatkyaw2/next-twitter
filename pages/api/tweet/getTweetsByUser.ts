@@ -37,7 +37,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         },
       });
 
-      console.log({ skip, take, tweets });
 
       res.status(201).json({
         isSuccess: true,

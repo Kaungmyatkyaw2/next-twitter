@@ -19,7 +19,6 @@ export async function axiosFetchTweetsByUser({
   take: number;
   userId: string;
 }) {
-  console.log({ skip, take, userId });
   return await apiInstance.get(
     `/tweet/getTweetsByUser?take=${take}&skip=${skip}&userId=${userId}`
   );

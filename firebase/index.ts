@@ -3,13 +3,13 @@ import { getStorage } from "firebase/storage";
 import { env } from "process";
 
 const firebaseConfig = {
-  apiKey: env.FIREBASE_API_KEY,
-  authDomain: env.FIREBASE_AUTH_DOMAIN,
-  projectId: env.FIREBASE_PROJECT_ID,
-  storageBucket: env.FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: env.FIREBASE_MESSAGING_SENDER_ID,
-  appId: env.FIREBASE_APP_ID,
-  measurementId: env.FIREBASE_MEASUREMENTID,
+  apiKey: "AIzaSyB9x7ok66NnYIWBhzsedUZtaD5rh742m2c",
+  authDomain: "bolt-88b73.firebaseapp.com",
+  projectId: "bolt-88b73",
+  storageBucket: "bolt-88b73.appspot.com",
+  messagingSenderId: "1029704518788",
+  appId: "1:1029704518788:web:2db672c0148e288be2c6d1",
+  measurementId: "G-J1KVJCGGF9"
 };
 
 // Initialize Firebase

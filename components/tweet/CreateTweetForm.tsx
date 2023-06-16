@@ -13,6 +13,7 @@ import { toast } from "react-hot-toast";
 
 export const CreateTweetForm = () => {
   const [createTweet, res] = useCreateTweetMutation();
+  const [isLoading, setIsLoading] = useState(false);
   const [caption, setCaption] = useState("");
   const { me } = useSelector((state: RootState) => state.user);
   const { tweets } = useSelector((state: RootState) => state.tweet);
@@ -20,17 +21,20 @@ export const CreateTweetForm = () => {
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const dispatch = useDispatch();
-  const { push } = useRouter();
 
   useEffect(() => {
     if (res.isSuccess) {
       dispatch(
         storeTweets([...(tweets === null ? [] : tweets), res.data.data])
       );
+      setIsLoading(false);
       setPreviewUrl(null);
       setFile(null);
       setCaption("");
       toast.success("Successfully tweeted");
+    } else if (res.isError) {
+      setIsLoading(false);
+      toast.error("Something went wrong");
     }
   }, [res]);
 
@@ -44,6 +48,8 @@ export const CreateTweetForm = () => {
   };
 
   const handleCreate = async () => {
+    setIsLoading(true);
+
     if (caption.length || file !== null) {
       const payload = {
         image: "",
@@ -53,11 +59,13 @@ export const CreateTweetForm = () => {
 
       if (file !== null && previewUrl !== null) {
         await uploadImage(file, previewUrl + Date.now())
-          .then((url) => (payload.image = url))
-          .catch((error) => console.log(error));
+          .then((url) => {
+            createTweet({ ...payload, image: url });
+          })
+          .catch((error) => console.error(error));
+      } else {
+        createTweet(payload);
       }
-
-      createTweet(payload);
     } else {
       toast.error("Must have caption or image something...");
     }
@@ -135,7 +143,7 @@ export const CreateTweetForm = () => {
                 variant="contained"
                 size="small"
                 sx={{ width: 100, padding: 1 }}
-                disabled={res.isLoading}
+                disabled={isLoading}
               >
                 Tweet
               </Button>

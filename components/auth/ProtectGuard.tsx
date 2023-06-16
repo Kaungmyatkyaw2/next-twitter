@@ -27,7 +27,8 @@ export const ProtectGuard = ({ children }: { children: React.ReactNode }) => {
     const isAuthorized = status === "authenticated";
 
     if (status !== "loading") {
-      if (isAuthorized && data?.user) {
+      // @ts-ignore
+      if (isAuthorized && data.user.id) {
         setIsLoading(true);
         // @ts-ignore
         getme({ id: data?.user.id });

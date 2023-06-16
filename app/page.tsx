@@ -26,6 +26,9 @@ const App = () => {
       dispatch(storeTweets(data.data));
       setMaxSkip(data.maxSkip);
       setIsLoading(false);
+    }else if(res.isError){
+      setIsLoading(false);
+      toast.error("Failed to fetch")
     }
   }, [res]);
 

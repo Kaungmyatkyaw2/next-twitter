@@ -26,7 +26,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           },
         });
 
-        console.log(description);
 
         res.status(200).json({ isSuccess: true, data: comment });
       }

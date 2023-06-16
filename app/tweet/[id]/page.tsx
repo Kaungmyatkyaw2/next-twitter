@@ -35,6 +35,7 @@ const Tweet = () => {
   const handleCompleteDeleteComment = (id: string) => {
     setTweet({
       ...tweet,
+      //@ts-ignore
       tweetComments: tweet.tweetComments.filter((i) => i.id !== id),
     });
   };
