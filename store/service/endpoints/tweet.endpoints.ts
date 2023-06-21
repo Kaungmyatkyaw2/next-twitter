@@ -55,6 +55,19 @@ const TweetEndPoints = RootApi.injectEndpoints({
         method: "DELETE",
       }),
     }),
+    saveTweet: build.mutation({
+      query: (payload) => ({
+        url: `/tweet/saveTweet`,
+        method: "POST",
+        body: payload,
+      }),
+    }),
+    unsaveTweet: build.mutation({
+      query: ({ userId, tweetId }) => ({
+        url: `/tweet/unsaveTweet?userId=${userId}&tweetId=${tweetId}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
@@ -67,4 +80,6 @@ export const {
   useLazyGetTweetsByUserQuery,
   useReactTweetMutation,
   useUnreactTweetMutation,
+  useSaveTweetMutation,
+  useUnsaveTweetMutation,
 } = TweetEndPoints;

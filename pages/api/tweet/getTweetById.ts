@@ -16,6 +16,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             },
           },
           tweetReactions: true,
+          savedTweet: true,
           tweetComments: {
             include: {
               user: true,

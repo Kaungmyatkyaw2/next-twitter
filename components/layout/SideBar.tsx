@@ -67,6 +67,17 @@ const DrawerContent = ({
         >
           Home
         </Button>
+        <Button
+          onClick={() => {
+            // push("/");
+            setOpenSideBar(false);
+          }}
+          startIcon={<Home />}
+          color="black"
+          size="large"
+        >
+          Saved
+        </Button>
         <Button fullWidth color="primary" variant="contained" size="large">
           Tweet
         </Button>

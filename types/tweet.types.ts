@@ -1,4 +1,9 @@
-import { tweetComments, tweetReactions, tweets } from "@prisma/client";
+import {
+  savedTweet,
+  tweetComments,
+  tweetReactions,
+  tweets,
+} from "@prisma/client";
 import { User } from "./user.types";
 
 export interface TweetComment extends tweetComments {
@@ -9,4 +14,5 @@ export interface Tweet extends tweets {
   user: User;
   tweetReactions: tweetReactions[];
   tweetComments: TweetComment[];
+  savedTweet: savedTweet[];
 }

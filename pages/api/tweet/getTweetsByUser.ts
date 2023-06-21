@@ -23,6 +23,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
               following: true,
             },
           },
+          savedTweet: true,
           tweetReactions: true,
           tweetComments: {
             include: {
@@ -36,7 +37,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           createdAt: "desc",
         },
       });
-
 
       res.status(201).json({
         isSuccess: true,

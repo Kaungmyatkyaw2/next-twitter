@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { ScreenLoader } from "../loader";
 import { useDispatch } from "react-redux";
 import { storeMe } from "@/store/slice/user.slice";
+import { useNavigationEvent } from "@/hooks";
 
 export const ProtectGuard = ({ children }: { children: React.ReactNode }) => {
   const [getme, res] = useLazyGetmeQuery();
@@ -13,6 +14,8 @@ export const ProtectGuard = ({ children }: { children: React.ReactNode }) => {
   const { status, data } = useSession();
   const router = useRouter();
   const { push: navigate } = router;
+
+  useNavigationEvent(() => {console.log("first")})
 
   useEffect(() => {
     if (res.isSuccess) {

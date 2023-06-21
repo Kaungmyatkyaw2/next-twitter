@@ -9,7 +9,9 @@ import React, { useEffect, useState } from "react";
 import { TweetCardHeader } from "./TweetCardHeader";
 import {
   useReactTweetMutation,
+  useSaveTweetMutation,
   useUnreactTweetMutation,
+  useUnsaveTweetMutation,
 } from "@/store/service/endpoints/tweet.endpoints";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
@@ -23,11 +25,15 @@ interface Prop {
 
 export const TweetCard = ({ tweet }: Prop) => {
   const [reactTweet, reactRes] = useReactTweetMutation();
+  const [saveTweet, saveRes] = useSaveTweetMutation();
   const [unreactTweet, unreactRes] = useUnreactTweetMutation();
-  const [isReacted, setIsReacted] = useState(false);
+  const [unsaveTweet, unsaveRes] = useUnsaveTweetMutation();
   const { me } = useSelector((state: RootState) => state.user);
   const { push } = useRouter();
   const dispatch = useDispatch();
+
+  const isReacted = tweet.tweetReactions.find((i) => i.userId === me?.id);
+  const isSaved = tweet.savedTweet.find((i) => i.userId === me?.id);
 
   useEffect(() => {
     if (reactRes.isSuccess) {
@@ -54,10 +60,28 @@ export const TweetCard = ({ tweet }: Prop) => {
   }, [unreactRes]);
 
   useEffect(() => {
-    const isExist = tweet.tweetReactions.find((i) => i.userId === me?.id);
+    if (saveRes.isSuccess) {
+      dispatch(
+        updateTweet({
+          ...tweet,
+          savedTweet: [...tweet.savedTweet, saveRes.data.data],
+        })
+      );
+    }
+  }, [saveRes]);
 
-    setIsReacted(!!isExist);
-  }, [tweet]);
+  useEffect(() => {
+    if (unsaveRes.isSuccess) {
+      dispatch(
+        updateTweet({
+          ...tweet,
+          savedTweet: tweet.savedTweet.filter(
+            (i) => i.userId !== me?.id
+          ),
+        })
+      );
+    }
+  }, [unsaveRes]);
 
   return (
     <Box
@@ -91,7 +115,13 @@ export const TweetCard = ({ tweet }: Prop) => {
             }}
             position={"relative"}
           >
-            <Image objectFit="cover" src={tweet.image} alt="image" fill />
+            <Image
+              objectFit="cover"
+              src={tweet.image}
+              alt="image"
+              className="rounded-sm"
+              fill
+            />
           </Box>
         ) : (
           <></>
@@ -157,9 +187,29 @@ export const TweetCard = ({ tweet }: Prop) => {
               </Typography>
             </Box>
           </Tooltip>
-          <Tooltip title="Share">
+          <Tooltip
+            title="Save"
+            onClick={() =>
+              isSaved
+                ? unsaveTweet({ userId: me?.id, tweetId: tweet.id })
+                : saveTweet({ userId: me?.id, tweetId: tweet.id })
+            }
+            sx={{ cursor: "pointer" }}
+          >
             {/* @ts-ignore */}
-            <ReplyIcon style={{ color: "#888888", fontSize: "20px" }} />
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                cursor: "pointer",
+              }}
+            >
+              <ReplyIcon style={{ color: "#888888", fontSize: "20px" }} />
+              <Typography sx={{ fontSize: "15px" }}>
+                {saveRes.isLoading || unsaveRes.isLoading ? "Processing" : isSaved ? "Unsave" : "Save"}
+              </Typography>
+            </Box>
           </Tooltip>
         </Box>
       </Box>

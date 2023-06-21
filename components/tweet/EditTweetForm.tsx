@@ -32,6 +32,7 @@ export const EditTweetForm = ({
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const dispatch = useDispatch();
 
+
   useEffect(() => {
     setCaption(tweet.caption || "");
     setPreviewUrl(tweet.image);

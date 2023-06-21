@@ -1,7 +1,7 @@
 "use client";
 
 import "./globals.css";
-import { Inter } from "next/font/google";
+import NextNProgress from "nextjs-progressbar";
 import { createTheme, ThemeProvider, PaletteColorOptions } from "@mui/material";
 import { Provider } from "react-redux";
 import store from "@/store/store";
@@ -80,6 +80,7 @@ export default function RootLayout({
         <SessionProvider>
           <Provider store={store}>
             <ThemeProvider theme={theme}>
+              <NextNProgress />
               <ProtectGuard>{children}</ProtectGuard>
             </ThemeProvider>
           </Provider>
