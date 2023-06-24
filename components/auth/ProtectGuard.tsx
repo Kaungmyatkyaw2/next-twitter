@@ -1,6 +1,6 @@
 import { useLazyGetmeQuery } from "@/store/service/endpoints/auth.endpoints";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { ScreenLoader } from "../loader";
 import { useDispatch } from "react-redux";
@@ -13,14 +13,22 @@ export const ProtectGuard = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
   const { status, data } = useSession();
   const router = useRouter();
+  const path = usePathname();
   const { push: navigate } = router;
 
-  useNavigationEvent(() => {console.log("first")})
+  console.log(path);
+
+  useNavigationEvent(() => {
+    console.log("first");
+  });
 
   useEffect(() => {
     if (res.isSuccess) {
       dispatch(storeMe(res.data.data));
       setIsLoading(false);
+      if (path?.includes("sign")) {
+        navigate("/");
+      }
     } else if (res.isError) {
       navigate("/signin");
     }

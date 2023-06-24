@@ -10,7 +10,10 @@ import {
 } from "@mui/material";
 import { Close, Home, Twitter } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
-import MobileAppBar from "./MobileAppBar";
+import SaveIcon from "@mui/icons-material/Save";
+import { signOut } from "next-auth/react";
+import { useDispatch } from "react-redux";
+import { storeMe } from "@/store/slice/user.slice";
 
 const DrawerContent = ({
   setOpenSideBar,
@@ -18,6 +21,12 @@ const DrawerContent = ({
   setOpenSideBar: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const { push } = useRouter();
+  const dispatch = useDispatch();
+
+  const handleSignout = async () => {
+    await signOut({ redirect: false, callbackUrl: "/signin" });
+    dispatch(storeMe(null));
+  };
 
   return (
     <>
@@ -69,17 +78,23 @@ const DrawerContent = ({
         </Button>
         <Button
           onClick={() => {
-            // push("/");
+            push("/saved");
             setOpenSideBar(false);
           }}
-          startIcon={<Home />}
+          startIcon={<SaveIcon />}
           color="black"
           size="large"
         >
           Saved
         </Button>
-        <Button fullWidth color="primary" variant="contained" size="large">
-          Tweet
+        <Button
+          onClick={handleSignout}
+          fullWidth
+          color="error"
+          variant="contained"
+          size="large"
+        >
+          Sign out
         </Button>
       </Stack>
     </>

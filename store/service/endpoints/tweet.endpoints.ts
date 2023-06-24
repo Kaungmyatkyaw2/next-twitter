@@ -29,6 +29,13 @@ const TweetEndPoints = RootApi.injectEndpoints({
       }),
     }),
 
+    getSavedTweets: build.query({
+      query: ({ take, skip, userId }) => ({
+        url: `/tweet/getSavedTweet?skip=${skip}&take=${take}&userId=${userId}`,
+        method: "GET",
+      }),
+    }),
+
     getTweetsById: build.query({
       query: ({ id }) => ({
         url: `/tweet/getTweetById?id=${id}`,
@@ -82,4 +89,5 @@ export const {
   useUnreactTweetMutation,
   useSaveTweetMutation,
   useUnsaveTweetMutation,
+  useLazyGetSavedTweetsQuery,
 } = TweetEndPoints;

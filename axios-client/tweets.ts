@@ -23,3 +23,16 @@ export async function axiosFetchTweetsByUser({
     `/tweet/getTweetsByUser?take=${take}&skip=${skip}&userId=${userId}`
   );
 }
+export async function axiosFetchSavedTweets({
+  skip,
+  take,
+  userId,
+}: {
+  skip: number;
+  take: number;
+  userId: string;
+}) {
+  return await apiInstance.get(
+    `/tweet/getTweetsByUser?take=${take}&skip=${skip}&userId=${userId}`
+  );
+}

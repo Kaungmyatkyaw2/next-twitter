@@ -16,3 +16,8 @@ export interface Tweet extends tweets {
   tweetComments: TweetComment[];
   savedTweet: savedTweet[];
 }
+
+export interface SavedTweet extends savedTweet {
+  user: User;
+  tweet: Tweet;
+}

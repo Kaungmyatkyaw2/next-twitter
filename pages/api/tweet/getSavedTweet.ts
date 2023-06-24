@@ -2,27 +2,33 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "@/lib";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { take, skip }: any = req.query;
+  const { take, skip, userId }: any = req.query;
 
   if (req.method === "GET") {
     try {
-      const countOfTweets = await prisma.tweets.count({});
+      const countOfTweets = await prisma.savedTweet.count({
+        where: {
+          userId,
+        },
+      });
 
-      const tweets = await prisma.tweets.findMany({
+      const tweets = await prisma.savedTweet.findMany({
+        where: {
+          userId,
+        },
         include: {
-          user: {
+          tweet: {
             include: {
-              followedBy: true,
-              following: true,
-            },
-          },
-          tweetReactions: true,
-          savedTweet: true,
-          tweetComments: {
-            include: {
+              tweetComments: true,
+              tweetReactions: {
+                include: {
+                  user: true,
+                },
+              },
               user: true,
             },
           },
+          user: true,
         },
         take: +take,
         skip: +skip,
