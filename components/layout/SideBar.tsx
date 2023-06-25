@@ -59,7 +59,7 @@ const DrawerContent = ({
           edge="start"
           color="inherit"
           aria-label="menu"
-          onClick={() => setOpenSideBar(true)}
+          onClick={() => setOpenSideBar(false)}
         >
           <Close />
         </IconButton>
