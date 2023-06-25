@@ -25,6 +25,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
               user: true,
             },
           },
+          savedTweet: true,
+       
         },
       });
 

@@ -32,9 +32,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
                 user: true,
               },
             },
+            savedTweet: true,
           },
         });
-
 
         res.status(200).json({ isSuccess: true, data: tweet });
       }
