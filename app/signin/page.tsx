@@ -16,6 +16,7 @@ import { InputPassword } from "@/components/form";
 import { signIn, useSession } from "next-auth/react";
 import { toast } from "react-hot-toast";
 import { env } from "process";
+import { useRouter } from "next/navigation";
 
 const Signin = () => {
   const data = useSession();
@@ -26,6 +27,7 @@ const Signin = () => {
     formState: { errors, isValid, touchedFields },
     control,
   } = useForm<SigninFormData>({ resolver: signinResolver });
+  const { push } = useRouter();
 
   async function submitData(data: SigninFormData) {
     try {
@@ -44,7 +46,6 @@ const Signin = () => {
       setIsLoading(false);
     }
   }
-
 
   return (
     <Grid
@@ -102,6 +103,13 @@ const Signin = () => {
         >
           Submit
         </Button>
+        <Typography
+          color={"primary"}
+          sx={{ fontSize: "14px",textAlign : 'center',cursor : 'pointer' }}
+          onClick={() => push("/signup")}
+        >
+          Sign up
+        </Typography>
       </FormControl>
     </Grid>
   );

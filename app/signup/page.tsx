@@ -119,6 +119,13 @@ const Signup = () => {
         >
           Submit
         </Button>
+        <Typography
+          color={"primary"}
+          sx={{ fontSize: "14px",textAlign : 'center',cursor : 'pointer' }}
+          onClick={() => navigate("/signin")}
+        >
+          Sign in
+        </Typography>
       </FormControl>
     </Grid>
   );

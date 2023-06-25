@@ -25,20 +25,38 @@ export const SavedTweetCard = ({
       sx={{
         padding: "10px",
         borderBottom: "1px solid #E0E0E0",
-        height: "150px",
+        height: {
+          sm: "150px",
+          xs: "100px",
+        },
         display: "flex",
       }}
     >
-      <Image
-        src={tweet.tweet.image || ""}
-        width={150}
-        height={150}
-        objectFit="cover"
-        style={{
-          borderRadius: "10px",
+      <Box
+        sx={{
+          width: {
+            sm: "200px",
+            xs: "100px",
+          },
+
+          height: {
+            sm: "150px",
+            xs: "100px",
+          },
         }}
-        alt="name"
-      />
+        position={'relative'}
+      >
+        <Image
+          src={tweet.tweet.image || ""}
+          fill={true}
+          objectFit="cover"
+          style={{
+            borderRadius: "10px",
+          }}
+          alt="name"
+        />
+      </Box>
+
       <Box
         sx={{
           px: 2,

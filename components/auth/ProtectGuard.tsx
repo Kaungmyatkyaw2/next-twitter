@@ -45,7 +45,9 @@ export const ProtectGuard = ({ children }: { children: React.ReactNode }) => {
         getme({ id: data?.user.id });
       } else {
         setIsLoading(false);
-        navigate("/signin");
+        if (!path?.includes("sign")) {
+          navigate("/signin");
+        }
       }
     }
   }, [status, data]);

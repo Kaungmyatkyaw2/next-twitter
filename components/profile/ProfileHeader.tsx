@@ -58,18 +58,38 @@ export const ProfileHeader = ({
             padding: "20px 30px",
             borderBottom: "1px solid #E0E0E0",
             display: "flex",
+            flexDirection: {
+              md: "row",
+              xs: "column",
+            },
           }}
         >
-          <Avatar
-            sx={{
-              height: "80px",
-              width: "80px",
-              textTransform: "uppercase",
-            }}
-            variant="rounded"
-          >
-            {user.username.trim().at(0)}
-          </Avatar>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Avatar
+              sx={{
+                height: "80px",
+                width: "80px",
+                textTransform: "uppercase",
+              }}
+              variant="rounded"
+            >
+              {user.username.trim().at(0)}
+            </Avatar>
+            <Typography
+              sx={{
+                fontWeight: "bold",
+                fontSize: "22px",
+                paddingTop: "10px",
+                paddingLeft: "20px",
+                display: {
+                  md: "none",
+                  xs: "black",
+                },
+              }}
+            >
+              {user.username}
+            </Typography>
+          </Box>
           <Box
             sx={{
               width: "100%",
@@ -80,15 +100,21 @@ export const ProfileHeader = ({
           >
             <Box
               sx={{
-                paddingX: "20px",
+                paddingX: {
+                  md: "20px",
+                  xs: "0px",
+                },
               }}
             >
               <Typography
                 sx={{
                   fontWeight: "bold",
                   fontSize: "22px",
-                  textAlign: "center",
                   paddingTop: "10px",
+                  display: {
+                    md: "block",
+                    xs: "none",
+                  },
                 }}
               >
                 {user.username}
