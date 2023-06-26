@@ -27,6 +27,24 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         },
       });
 
+      await prisma.tweetComments.deleteMany({
+        where: {
+          tweetId: targetTweet?.id,
+        },
+      });
+
+      await prisma.tweetReactions.deleteMany({
+        where: {
+          tweetId: targetTweet?.id,
+        },
+      });
+
+      await prisma.savedTweet.deleteMany({
+        where: {
+          tweetId: targetTweet?.id,
+        },
+      });
+
       res.status(200).json({ isSuccess: true, data: deleteTweet });
     } catch (error) {
       console.log(error);
