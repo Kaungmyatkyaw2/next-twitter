@@ -17,14 +17,14 @@ export const SavedTweetCard = ({
       sx={{
         padding: "10px",
         borderBottom: "1px solid #E0E0E0",
-        maxHeight : '150px',
+        maxHeight: "150px",
         display: "flex",
       }}
     >
       {tweet.tweet.image?.length ? (
         <Box
           sx={{
-            width: '200px',
+            width: "200px",
             height: "150px",
           }}
           position={"relative"}
@@ -42,17 +42,18 @@ export const SavedTweetCard = ({
       ) : (
         <></>
       )}
+      <Box sx={{ display: "flex", alignItems: "center" }} width={"100%"}>
+        <Box
+          sx={{
+            px: 2,
+          }}
+          width={"100%"}
+        >
+          <SavedTweetCardHeader tweet={tweet.tweet} setTweets={setTweets} />
 
-      <Box
-        sx={{
-          px: 2,
-        }}
-        width={"100%"}
-      >
-        <SavedTweetCardHeader tweet={tweet.tweet} setTweets={setTweets} />
-
-        <Box sx={{ paddingLeft: "70px" }}>
-          <Typography>{tweet.tweet.caption}</Typography>
+          <Box sx={{ paddingLeft: "70px" }}>
+            <Typography>{tweet.tweet.caption}</Typography>
+          </Box>
         </Box>
       </Box>
     </Box>

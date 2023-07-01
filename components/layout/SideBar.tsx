@@ -25,6 +25,7 @@ const DrawerContent = ({
 
   const handleSignout = async () => {
     await signOut({ redirect: false, callbackUrl: "/signin" });
+    push('/signin')
     dispatch(storeMe(null));
   };
 
