@@ -8,6 +8,7 @@ import store from "@/store/store";
 import { SessionProvider } from "next-auth/react";
 import { ProtectGuard } from "@/components/auth";
 import { Toaster } from "react-hot-toast";
+import Head from "next/head";
 
 declare module "@mui/material/styles" {
   interface CustomPalette {

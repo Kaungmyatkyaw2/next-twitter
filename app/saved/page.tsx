@@ -7,7 +7,8 @@ import { useLazyGetSavedTweetsQuery } from "@/store/service/endpoints/tweet.endp
 import { addTweets, storeTweets } from "@/store/slice/tweet.slice";
 import { RootState } from "@/store/store";
 import { SavedTweet, Tweet, User } from "@/types";
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
+import Head from "next/head";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -89,13 +90,30 @@ const SavedTweet = () => {
   return (
     <LayoutProvider>
       <>
-        {savedTweets.map((i) => (
-          <SavedTweetCard
-            setTweets={setSavedTweets}
-            tweet={i}
-            key={i.tweetId}
-          />
-        ))}
+      <Head>
+        <title>Saved Tweet</title>
+      </Head>
+        {!tweetRes.isLoading &&
+          (savedTweets.length ? (
+            savedTweets.map((i) => (
+              <SavedTweetCard
+                setTweets={setSavedTweets}
+                tweet={i}
+                key={i.tweetId}
+              />
+            ))
+          ) : (
+            <Typography
+              sx={{
+                textAlign: "center",
+                fontSize: "20px",
+                fontWeight: "bold",
+                marginTop: "10px",
+              }}
+            >
+              No saved tweet
+            </Typography>
+          ))}
         {tweetFetchLoading && (
           <Box
             sx={{

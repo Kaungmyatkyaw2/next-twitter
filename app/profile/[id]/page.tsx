@@ -10,6 +10,7 @@ import { addTweets, storeTweets } from "@/store/slice/tweet.slice";
 import { RootState } from "@/store/store";
 import { Tweet, User } from "@/types";
 import { Box, CircularProgress } from "@mui/material";
+import Head from "next/head";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -110,6 +111,10 @@ const Profile = () => {
 
   return (
     <LayoutProvider>
+      <Head>
+        <title>Profile</title>
+      </Head>
+
       {isLoading ? (
         <Box
           sx={{

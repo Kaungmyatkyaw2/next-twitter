@@ -6,6 +6,7 @@ import { TweetCard } from "@/components/tweet";
 import { useLazyGetTweetsByIdQuery } from "@/store/service/endpoints/tweet.endpoints";
 import { Tweet, TweetComment } from "@/types";
 import { Box, CircularProgress, Typography } from "@mui/material";
+import Head from "next/head";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 const Tweet = () => {
@@ -42,6 +43,9 @@ const Tweet = () => {
 
   return (
     <LayoutProvider>
+      <Head>
+        <title>Tweet Detail</title>
+      </Head>
       {isLoading ? (
         <Box
           sx={{

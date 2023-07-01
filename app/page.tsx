@@ -7,6 +7,7 @@ import { useLazyGetTweetsQuery } from "@/store/service/endpoints/tweet.endpoints
 import { addTweets, storeTweets } from "@/store/slice/tweet.slice";
 import { RootState } from "@/store/store";
 import { Box, CircularProgress } from "@mui/material";
+import Head from "next/head";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
@@ -26,9 +27,9 @@ const App = () => {
       dispatch(storeTweets(data.data));
       setMaxSkip(data.maxSkip);
       setIsLoading(false);
-    }else if(res.isError){
+    } else if (res.isError) {
       setIsLoading(false);
-      toast.error("Failed to fetch")
+      toast.error("Failed to fetch");
     }
   }, [res]);
 
@@ -80,6 +81,9 @@ const App = () => {
 
   return (
     <LayoutProvider>
+      <Head>
+        <title>Home</title>
+      </Head>
       <CreateTweetForm />
 
       {tweets?.map((tweet) => (

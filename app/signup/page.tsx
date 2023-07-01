@@ -15,6 +15,7 @@ import { SignupFormData, signupResolver } from "@/validation";
 import { InputPassword } from "@/components/form";
 import { useSignupMutation } from "@/store/service/endpoints/user.endpoints";
 import { useRouter } from "next/navigation";
+import Head from "next/head";
 
 const Signup = () => {
   const [signup, res] = useSignupMutation();
@@ -48,6 +49,9 @@ const Signup = () => {
       justifyContent="center"
       sx={{ height: "100vh" }}
     >
+      <Head>
+        <title>Sign up</title>
+      </Head>
       <FormControl
         onSubmit={handleSubmit((data) => submitData(data))}
         sx={{ width: "300px", display: "flex", gap: 3 }}
@@ -121,7 +125,7 @@ const Signup = () => {
         </Button>
         <Typography
           color={"primary"}
-          sx={{ fontSize: "14px",textAlign : 'center',cursor : 'pointer' }}
+          sx={{ fontSize: "14px", textAlign: "center", cursor: "pointer" }}
           onClick={() => navigate("/signin")}
         >
           Sign in

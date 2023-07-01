@@ -17,6 +17,7 @@ import { signIn, useSession } from "next-auth/react";
 import { toast } from "react-hot-toast";
 import { env } from "process";
 import { useRouter } from "next/navigation";
+import Head from "next/head";
 
 const Signin = () => {
   const data = useSession();
@@ -56,6 +57,9 @@ const Signin = () => {
       justifyContent="center"
       sx={{ height: "100vh" }}
     >
+      <Head>
+        <title>Signin</title>
+      </Head>
       <FormControl
         onSubmit={handleSubmit((data) => submitData(data))}
         sx={{ width: "300px", display: "flex", gap: 3 }}
@@ -105,7 +109,7 @@ const Signin = () => {
         </Button>
         <Typography
           color={"primary"}
-          sx={{ fontSize: "14px",textAlign : 'center',cursor : 'pointer' }}
+          sx={{ fontSize: "14px", textAlign: "center", cursor: "pointer" }}
           onClick={() => push("/signup")}
         >
           Sign up

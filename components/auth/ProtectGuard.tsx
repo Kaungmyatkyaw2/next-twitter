@@ -16,11 +16,6 @@ export const ProtectGuard = ({ children }: { children: React.ReactNode }) => {
   const path = usePathname();
   const { push: navigate } = router;
 
-  console.log(path);
-
-  useNavigationEvent(() => {
-    console.log("first");
-  });
 
   useEffect(() => {
     if (res.isSuccess) {
