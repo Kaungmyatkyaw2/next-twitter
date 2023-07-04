@@ -8,12 +8,13 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { Close, Home, Twitter } from "@mui/icons-material";
+import { Close, Home, Twitter, Person } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import SaveIcon from "@mui/icons-material/Save";
 import { signOut } from "next-auth/react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { storeMe } from "@/store/slice/user.slice";
+import { RootState } from "@/store/store";
 
 const DrawerContent = ({
   setOpenSideBar,
@@ -22,11 +23,12 @@ const DrawerContent = ({
 }) => {
   const { push } = useRouter();
   const dispatch = useDispatch();
+  const me = useSelector((state: RootState) => state.user.me);
 
   const handleSignout = async () => {
     await signOut({ redirect: false, callbackUrl: "/signin" });
-    push('/signin')
-    dispatch(storeMe(null));
+    await dispatch(storeMe(null));
+    push("/signin");
   };
 
   return (
@@ -65,29 +67,51 @@ const DrawerContent = ({
           <Close />
         </IconButton>
       </Box>
-      <Stack spacing={2}>
-        <Button
-          onClick={() => {
-            push("/");
-            setOpenSideBar(false);
-          }}
-          startIcon={<Home />}
-          color="black"
-          size="large"
-        >
-          Home
-        </Button>
-        <Button
-          onClick={() => {
-            push("/saved");
-            setOpenSideBar(false);
-          }}
-          startIcon={<SaveIcon />}
-          color="black"
-          size="large"
-        >
-          Saved
-        </Button>
+      <Box
+        sx={{
+          paddingBottom: "20px",
+          display: "flex",
+          justifyContent: "space-between",
+          flexDirection: "column",
+          height: "100%",
+          // background: "red",
+        }}
+      >
+        <Stack spacing={2}>
+          <Button
+            onClick={() => {
+              push("/");
+              setOpenSideBar(false);
+            }}
+            startIcon={<Home />}
+            color="black"
+            size="large"
+          >
+            Home
+          </Button>
+          <Button
+            onClick={() => {
+              push("/saved");
+              setOpenSideBar(false);
+            }}
+            startIcon={<SaveIcon />}
+            color="black"
+            size="large"
+          >
+            Saved
+          </Button>
+          <Button
+            onClick={() => {
+              push(`/profile/${me?.id}`);
+              setOpenSideBar(false);
+            }}
+            startIcon={<Person />}
+            color="black"
+            size="large"
+          >
+            My Profile
+          </Button>
+        </Stack>
         <Button
           onClick={handleSignout}
           fullWidth
@@ -97,7 +121,7 @@ const DrawerContent = ({
         >
           Sign out
         </Button>
-      </Stack>
+      </Box>
     </>
   );
 };

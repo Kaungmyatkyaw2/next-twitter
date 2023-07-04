@@ -93,45 +93,37 @@ export const SavedTweetCardHeader = ({
               <ReactTimeago date={tweet.createdAt} />
             </Typography>
           </Box>
-          {me?.id === tweet.user.id ? (
-            <>
-              <IconButton
-                size="small"
-                id="basic-button"
-                aria-controls={open ? "basic-menu" : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? "true" : undefined}
-                onClick={handleClick}
+          <>
+            <IconButton
+              size="small"
+              id="basic-button"
+              aria-controls={open ? "basic-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              onClick={handleClick}
+            >
+              <MoreVertIcon />
+            </IconButton>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={() => (unsaveLoading ? "" : handleClose())}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+            >
+              <MenuItem
+                disabled={unsaveLoading}
+                onClick={() => handleClose("unsave")}
               >
-                <MoreVertIcon />
-              </IconButton>
-              <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={() => (unsaveLoading ? "" : handleClose())}
-                MenuListProps={{
-                  "aria-labelledby": "basic-button",
-                }}
-              >
-                <MenuItem
-                  disabled={unsaveLoading}
-                  onClick={() => handleClose("unsave")}
-                >
-                  {unsaveLoading ? (
-                    <CircularProgress size={"20px"} />
-                  ) : (
-                    "Unsave"
-                  )}
-                </MenuItem>
-                <MenuItem onClick={() => handleClose("view")}>
-                  View Tweet
-                </MenuItem>
-              </Menu>
-            </>
-          ) : (
-            <></>
-          )}
+                {unsaveLoading ? <CircularProgress size={"20px"} /> : "Unsave"}
+              </MenuItem>
+              <MenuItem onClick={() => handleClose("view")}>
+                View Tweet
+              </MenuItem>
+            </Menu>
+          </>
         </Box>
       </Box>
     </>

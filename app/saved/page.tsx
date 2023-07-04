@@ -24,8 +24,11 @@ const SavedTweet = () => {
   const [getTweets, tweetRes] = useLazyGetSavedTweetsQuery();
   const params = useParams();
   const { id }: any = params;
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(storeTweets([]));
+
     window.addEventListener("scroll", handleInfiniteScroll);
     return () => window.removeEventListener("scroll", handleInfiniteScroll);
   }, []);
@@ -90,9 +93,9 @@ const SavedTweet = () => {
   return (
     <LayoutProvider>
       <>
-      <Head>
-        <title>Saved Tweet</title>
-      </Head>
+        <Head>
+          <title>Saved Tweet</title>
+        </Head>
         {!tweetRes.isLoading &&
           (savedTweets.length ? (
             savedTweets.map((i) => (

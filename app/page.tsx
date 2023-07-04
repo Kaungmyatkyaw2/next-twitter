@@ -22,6 +22,10 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(storeTweets([]));
+  }, []);
+
+  useEffect(() => {
     if (res.isSuccess) {
       const data = res.data;
       dispatch(storeTweets(data.data));
@@ -34,7 +38,6 @@ const App = () => {
   }, [res]);
 
   useEffect(() => {
-    dispatch(storeTweets([]));
     if (me) {
       getTweets({ skip: 0, take: 2 });
     }

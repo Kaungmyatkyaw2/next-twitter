@@ -77,6 +77,9 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+      <Head>
+        <title>Twitter 02</title>
+      </Head>
       <body>
         <SessionProvider>
           <Provider store={store}>
