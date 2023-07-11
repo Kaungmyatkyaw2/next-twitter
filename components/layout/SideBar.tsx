@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Close, Home, Twitter, Person } from "@mui/icons-material";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import SaveIcon from "@mui/icons-material/Save";
 import { signOut } from "next-auth/react";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,6 +23,7 @@ const DrawerContent = ({
 }) => {
   const { push } = useRouter();
   const dispatch = useDispatch();
+  const path = usePathname();
   const me = useSelector((state: RootState) => state.user.me);
 
   const handleSignout = async () => {
@@ -86,6 +87,7 @@ const DrawerContent = ({
             startIcon={<Home />}
             color="black"
             size="large"
+            variant={path == "/" ? "outlined" : "text"}
           >
             Home
           </Button>
@@ -97,6 +99,7 @@ const DrawerContent = ({
             startIcon={<SaveIcon />}
             color="black"
             size="large"
+            variant={path?.includes("saved") ? "outlined" : "text"}
           >
             Saved
           </Button>
@@ -108,6 +111,7 @@ const DrawerContent = ({
             startIcon={<Person />}
             color="black"
             size="large"
+            variant={path?.includes("profile") ? "outlined" : "text"}
           >
             My Profile
           </Button>
