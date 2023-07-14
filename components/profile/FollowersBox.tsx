@@ -82,48 +82,72 @@ const FollowersBox = ({ user, setOpen }: Prop) => {
   };
 
   return (
-    <Box ref={boxRef} width={"300px"} minHeight={"500px"}>
-      <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          paddingBottom: "20px",
-        }}
-      >
-        <Typography variant="subtitle1">{user.username}'s Followers</Typography>
-        <IconButton
-          size="small"
-          onClick={() => {
-            setOpen(false);
-          }}
-        >
-          <Close />
-        </IconButton>
-      </Box>
-      {res.isLoading ? (
-        <></>
-      ) : followers.length ? (
-        followers.map((u) => <FollowerCard user={u} key={u.id} />)
-      ) : (
-        <Typography variant="subtitle1" sx={{ textAlign: "center" }}>
-          No Followers
-        </Typography>
-      )}
-      {isLoading && (
+    <Box
+      ref={boxRef}
+      sx={{
+        width: {
+          sm: "300px",
+          xs: "100%",
+        },
+        height: {
+          sm: "500px",
+          xs: "100vh",
+        },
+        position: {
+          sm: "static",
+          xs: "fixed",
+        },
+        top: 0,
+        left: 0,
+        paddingY: { sm: "0px", xs: "10px" },
+        background: "white",
+      }}
+    >
+      <Box sx={{ paddingX: "10px" }}>
         <Box
           sx={{
             width: "100%",
             display: "flex",
-            justifyContent: "center",
+            justifyContent: "space-between",
             alignItems: "center",
-            paddingY: "20px",
+            paddingBottom: "20px",
           }}
         >
-          <CircularProgress />
+          <Typography variant="subtitle1">
+            {user.username}'s Followers
+          </Typography>
+          <IconButton
+            size="small"
+            onClick={() => {
+              setOpen(false);
+            }}
+          >
+            <Close />
+          </IconButton>
         </Box>
-      )}
+        {res.isLoading ? (
+          <></>
+        ) : followers.length ? (
+          followers.map((u) => <FollowerCard user={u} key={u.id} />)
+        ) : (
+          <Typography variant="subtitle1" sx={{ textAlign: "center" }}>
+            No Followers
+          </Typography>
+        )}
+        {isLoading && (
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              paddingY: "20px",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        )}
+      </Box>
     </Box>
   );
 };
