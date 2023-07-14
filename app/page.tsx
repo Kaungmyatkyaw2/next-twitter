@@ -12,6 +12,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+
 const App = () => {
   const [skip, setSkip] = useState(0);
   const [maxSkip, setMaxSkip] = useState(0);

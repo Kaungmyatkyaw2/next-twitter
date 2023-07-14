@@ -2,6 +2,9 @@
 
 import { axiosFetchTweetsByUser } from "@/axios-client";
 import { LayoutProvider } from "@/components/layout";
+import { SimpleModal } from "@/components/modal";
+import FollowersBox from "@/components/profile/FollowersBox";
+import FollowingBox from "@/components/profile/FollowingBox";
 import { ProfileHeader } from "@/components/profile/ProfileHeader";
 import { TweetCard } from "@/components/tweet";
 import { useLazyGetTweetsByUserQuery } from "@/store/service/endpoints/tweet.endpoints";
@@ -24,6 +27,8 @@ const Profile = () => {
   const [maxSkip, setMaxSkip] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [tweetFetchLoading, setTweetFetchLoading] = useState(true);
+  const [showFollower, setShowFollower] = useState(false);
+  const [showFollowing, setShowFollowing] = useState(false);
   const [user, setUser] = useState<User>({} as User);
   const [getUser, res] = useLazyGetUserQuery();
   const [getTweets, tweetRes] = useLazyGetTweetsByUserQuery();
@@ -129,7 +134,12 @@ const Profile = () => {
         </Box>
       ) : (
         <>
-          <ProfileHeader setUser={setUser} user={user} />
+          <ProfileHeader
+            setShowFollower={setShowFollower}
+            setShowFollowing={setShowFollowing}
+            setUser={setUser}
+            user={user}
+          />
           {tweets.map((i) => (
             <TweetCard tweet={i} key={i.id} />
           ))}
@@ -149,6 +159,13 @@ const Profile = () => {
           )}
         </>
       )}
+
+      <SimpleModal open={showFollower}>
+        <FollowersBox setOpen={setShowFollower} user={user} />
+      </SimpleModal>
+      <SimpleModal open={showFollowing}>
+        <FollowingBox setOpen={setShowFollowing} user={user} />
+      </SimpleModal>
     </LayoutProvider>
   );
 };

@@ -16,8 +16,11 @@ const UserSlice = createSlice({
     storeMe: (state, action) => {
       state.me = action.payload;
     },
+    addFollowing: (state, action) => {
+      state.me?.following.push(action.payload);
+    },
   },
 });
 
-export const { storeMe } = UserSlice.actions;
+export const { storeMe, addFollowing } = UserSlice.actions;
 export default UserSlice.reducer;

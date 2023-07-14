@@ -29,8 +29,22 @@ const UserEndPoints = RootApi.injectEndpoints({
         body: payload,
       }),
     }),
+    getFollowers: build.query({
+      query: ({ take, id, skip }) =>
+        `user/getFollowers?id=${id}&take=${take}&skip=${skip}`,
+    }),
+    getFollowings: build.query({
+      query: ({ take, id, skip }) =>
+        `user/getFollowings?id=${id}&take=${take}&skip=${skip}`,
+    }),
   }),
 });
 
-export const { useSignupMutation, useLazyGetUserQuery, useFollowUserMutation,useUnfollowUserMutation } =
-  UserEndPoints;
+export const {
+  useSignupMutation,
+  useLazyGetUserQuery,
+  useFollowUserMutation,
+  useUnfollowUserMutation,
+  useLazyGetFollowersQuery,
+  useLazyGetFollowingsQuery,
+} = UserEndPoints;

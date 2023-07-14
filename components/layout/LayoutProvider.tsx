@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { SideBar } from "./SideBar";
-import { Grid } from "@mui/material";
+import { Avatar, Box, Grid, Typography } from "@mui/material";
 import MobileAppBar from "./MobileAppBar";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 export const LayoutProvider = ({ children }: { children: React.ReactNode }) => {
   const [openSideBar, setOpenSideBar] = useState(false);
@@ -28,10 +30,9 @@ export const LayoutProvider = ({ children }: { children: React.ReactNode }) => {
           sm={7}
           xs={12}
           sx={{
-            marginTop: {sm : '0px',xs : '50px'},
+            marginTop: { sm: "0px", xs: "50px" },
             borderRight: "1px solid #E0E0E0",
             minHeight: "100vh",
-
           }}
         >
           {children}

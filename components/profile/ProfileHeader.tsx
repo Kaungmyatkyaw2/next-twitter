@@ -11,9 +11,13 @@ import { useSelector } from "react-redux";
 export const ProfileHeader = ({
   user,
   setUser,
+  setShowFollower,
+  setShowFollowing,
 }: {
   user: User;
   setUser: React.Dispatch<React.SetStateAction<User>>;
+  setShowFollower: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowFollowing: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const { me } = useSelector((state: RootState) => state.user);
   const [alreadyFollow, setAlreadyFollow] = useState(false);
@@ -128,7 +132,12 @@ export const ProfileHeader = ({
                   paddingTop: "5px",
                 }}
               >
-                <Typography sx={{ fontSize: "12px", color: "#888888" }}>
+                <Typography
+                  sx={{ fontSize: "12px", color: "#888888" }}
+                  onClick={() => {
+                    setShowFollower((prev) => !prev);
+                  }}
+                >
                   <span
                     style={{
                       fontSize: "16px",
@@ -140,7 +149,12 @@ export const ProfileHeader = ({
                   </span>
                   Followers
                 </Typography>
-                <Typography sx={{ fontSize: "12px", color: "#888888" }}>
+                <Typography
+                  sx={{ fontSize: "12px", color: "#888888" }}
+                  onClick={() => {
+                    setShowFollowing((prev) => !prev);
+                  }}
+                >
                   <span
                     style={{
                       fontSize: "16px",
